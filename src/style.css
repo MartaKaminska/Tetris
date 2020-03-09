@@ -1,0 +1,71 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+	font-family: 'Quicksand', sans-serif;
+	
+	background-color: white;
+
+	--I-color: rgb(63, 153, 51);
+	--J-color: rgb(189, 188, 148);
+	--L-color: rgb(0, 76, 97);
+	--O-color: rgb(48, 8, 104);
+	--S-color: rgb(255, 148, 61);
+	--T-color: rgb(206, 128, 255);
+	--Z-color: rgb(184, 67, 12);
+	--zero-color: rgb(12, 14, 11);
+}
+
+/* .stage {
+	display: grid;
+	grid-template-rows: repeat(20, calc(25vw/ 12));
+	grid-template-columns: repeat(12, 1fr);
+	border: 1px solid #000;
+	width: 100%;
+	max-width: 25vw;
+}; */
+
+.row {
+	display: flex;
+}
+.cell {
+	height: 3vmin;
+	width: 3vmin;
+	border: 1px solid red;
+	background-color: white;
+}
+.allowed .cell {
+	border: 1px solid #777;
+}
+
+.I {
+	background-color: brown;
+}
+
+.S {
+	background-color: blue;
+}
+
+.O {
+	background-color: violet;
+}
+
+.Z {
+	background-color: yellowgreen;
+}
+
+.T {
+	background-color: black;
+}
+
+.L {
+	background-color: gray;
+}
+
+.J {
+	background-color: green;
+}
+
