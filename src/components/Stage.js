@@ -1,6 +1,7 @@
-import React, {Component} from "react";
+import React from "react";
 
 function Stage(props) {
+	console.log('Stage')
 
 		return (
 			<div className={'stage ' + (props.allowed ? 'allowed' : '')}>

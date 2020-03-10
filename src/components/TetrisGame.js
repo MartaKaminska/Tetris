@@ -18,7 +18,7 @@ class TetrisGame extends Component {
 		super(props);
 		this.state = {
 			board: this.startArray(),
-			tetrim: {
+			brick: {
 				y: 1,
 				x: this.props.w/ 2 - 2,
 				rot: 0,
@@ -37,15 +37,43 @@ class TetrisGame extends Component {
 	}
 
 	startGame = () => {
+		console.log('game start')
+
+		this.moveBrick()
+	}
 		
-		updateBrickPos(this.state.board, this.state.tetrim)
+	moveBrick = () => {
+		console.log('update')
+		this.setIntervalId = setInterval(() => {
+			
+			if(canAddBrick(this.state.board, this.state.brick, this.props.x, this.props.y)){
+				this.setState ({
+					brick: {
+						...this.state.brick
+					}
+				})
+
+				this.setState ({
+					board: boardWithBrick(this.state.board, 	this.state.brick)
+				});
+			} else {
+				this.setState({
+					brick: {
+						y: 1,
+						x: this.props.w/ 2 - 2,
+						rot: 0,
+						shape: randomTetrims().shape
+					}
+				})
+			};
+
+		}, 500);
 	}
 
 	render() {
 		return (
 			<StyledTetrisGame>
-				<Stage allowed={ canAddBrick(this.state.board, this.state.tetrim) }
-				 board={boardWithBrick(this.state.board, this.state.tetrim)}/>
+				<Stage board={this.state.board} allowed={true}/>
 				<button onClick={this.startGame}>Start Game</button>
 			</StyledTetrisGame>
 		)

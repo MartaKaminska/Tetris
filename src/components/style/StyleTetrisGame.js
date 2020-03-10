@@ -6,5 +6,5 @@ export const StyledTetrisGame = styled.div`
 	align-items: flex-start;
 	padding: 40px;
 	margin: 0 auto;
-	max-width: 900
+	max-width: 900;
 `

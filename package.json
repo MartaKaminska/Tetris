@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MartaKaminska/Tetris-game.git"
+    "url": "git+https://github.com/MartaKaminska/Tetris.git"
   },
   "author": "MartaKamińska",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MartaKaminska/Tetris-game/issues"
+    "url": "https://github.com/MartaKaminska/Tetris/issues"
   },
-  "homepage": "https://github.com/MartaKaminska/Tetris-game#readme",
+  "homepage": "https://github.com/MartaKaminska/Tetris#readme",
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
