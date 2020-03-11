@@ -31,7 +31,8 @@ export const Tetrims = {
 				[0, 'Z', 'Z'],
 				[0, 0, 0]
 				],
-		color: '184, 67, 12'}
+		color: '184, 67, 12'},
+	// A: {shape : [[0]]}
 };
 
 export const randomTetrims = () => {

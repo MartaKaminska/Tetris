@@ -42,7 +42,7 @@ body {
 }
 
 .I {
-	background-color: brown;
+	background-color: rgb(253, 22, 22);
 }
 
 .S {
@@ -67,5 +67,9 @@ body {
 
 .J {
 	background-color: green;
+}
+
+.A {
+	background-color: brown;
 }
 
