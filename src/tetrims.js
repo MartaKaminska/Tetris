@@ -6,9 +6,9 @@ export const Tetrims = {
 				[0, 'I', 0, 0],
 				[0, 'I', 0, 0]],
 		color: '63, 153, 51'},
-	J: {shape: [[0, 'J', 0],
-				[0, 'J', 0],
-				['J', 'J', 0]],
+	J: {shape: [[0, 0, 'J'],
+				[0, 0, 'J'],
+				[0, 'J', 'J']],
 		color: '189, 188, 148'},
 	L: {shape: [[0, 'L', 0],
 				[0, 'L', 0],
@@ -32,7 +32,6 @@ export const Tetrims = {
 				[0, 0, 0]
 				],
 		color: '184, 67, 12'},
-	// A: {shape : [[0]]}
 };
 
 export const randomTetrims = () => {
