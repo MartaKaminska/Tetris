@@ -70,3 +70,40 @@ body {
 	background-color: brown;
 }
 
+.opperationSide {
+	display: flex;
+	flex-direction: column;
+	margin-left: 10px;
+}
+
+.score {
+	box-sizing: border-box;
+	display: flex;
+	align-items: conter;
+	margin: 0 0 20px 0;
+	padding: 20px;
+	border: 4px solid #333;
+	min-height: 30px;
+	width: 100%;
+	border-radius: 20px;
+	/* color: ${props => (props.gameOver ? 'red' : '#999')}; */
+	background: #000;
+	font-size: 0.8rem;
+	color: white;
+}
+
+.startButton {
+	box-sizing: border-box;
+	margin: 0 0 20px 0;
+	padding: 20px;
+	min-height: 30px;
+	width: 100%;
+	border-radius: 20px;
+	border: none;
+	color: #fff;
+	background: #333;
+	font-size: 1rem;
+	outline: none;
+	cursor: pointer;
+}
+

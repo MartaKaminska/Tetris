@@ -3,7 +3,6 @@
 	export const collapseRow = (board, width, height) => {
 		const copyBoard = board.map(row => [...row]);
 		let counter = 0;
-		console.log('collapseRow')
 
 		for(let i=0; i < height; i++) {
 			counter = 0;
@@ -15,8 +14,8 @@
 			if(counter === width) {
 				copyBoard.splice(i,1);
 				copyBoard.unshift(new Array(width).fill(''));
+				return [copyBoard, true];
 			}
 		}
-
-		return copyBoard;
+		return [copyBoard, false];
 	};

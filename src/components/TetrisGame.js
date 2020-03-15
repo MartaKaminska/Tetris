@@ -23,7 +23,10 @@ export default class TetrisGame extends Component {
 				x: this.props.w/2 - 2,
 				y: -1,
 				shape: randomTetrims(this.props.w).shape
-			}
+			},
+			rot: 0,
+			mode: 'normal',
+			score: 0
 		}
 	}
 
@@ -38,18 +41,40 @@ export default class TetrisGame extends Component {
 	}
 
 	// move tetrim and change state board and tetrim
-	changePos = (dir, rot) => {
+	changePos = (dir) => {
+		if (this.state.mode === 'shouldRemove') {
+			let [newBoard, shouldRemove] = collapseRow(this.state.board, this.props.w, this.props.h);
+			if (shouldRemove) {
+				this.setState({
+					board: newBoard,
+					brick: {}, 
+					rot: 0,
+					mode: 'shouldRemove',
+					score: this.state.score+1
+				});
+			} else {
+				let newTetrim = randomTetrims(this.props.w);
+				this.setState({
+					board: newBoard,
+					brick : newTetrim,
+					rot: 0,
+					mode: 'normal'
+				});
+			}
+			return;		
+		}
+
 		let brickClone = JSON.parse(JSON.stringify(this.state.brick));
 
 		// rotate brick when requested
-		if (rot === 1) {
+		if (this.state.rot === 1) {
 			rotateMatrix(brickClone);
 		}
 
 		let [canAdd, newDir] = canAddBrick(this.state.board, brickClone, this.props.w, this.props.h, dir);
 	
 		// if rotation is not available
-		if (rot === 1 && canAdd === 'false') {
+		if (this.state.rot === 1 && canAdd === 'false') {
 			[canAdd, newDir]  = canAddBrick(this.state.board, this.state.brick, this.props.w, this.props.h, dir);
 			brickClone = this.state.brick;
 		}
@@ -63,15 +88,30 @@ export default class TetrisGame extends Component {
 			this.setState ({
 				board: boardWithBrick(this.state.board, brickClone, this.props.w, this.props.h),
 				brick : brickClone,
+				rot: 0,
+				mode: 'normal'
 			});
 
 		} else {
 
 			let brickToPaint = this.state.brick;
 			let newBoard = canMoveBrick(this.state.board, brickToPaint);
+			let shouldRemove = false;
 
 			// clear line
-			newBoard = collapseRow(newBoard, this.props.w, this.props.h);
+			[newBoard, shouldRemove] = collapseRow(newBoard, this.props.w, this.props.h);
+
+			if (shouldRemove) {
+				this.setState({
+					board: newBoard,
+					brick: {},
+					rot: 0,
+					mode: 'shouldRemove',
+					score: this.state.score + 1
+				});
+				return;
+			}
+			
 
 			// random new brick
 			let newTetrim = randomTetrims(this.props.w);
@@ -80,7 +120,9 @@ export default class TetrisGame extends Component {
 			// nex board state with new brick
 			this.setState ({
 				board: boardWithBrick(newBoard, newTetrim, this.props.w, this.props.h),
-				brick : newTetrim
+				brick : newTetrim,
+				rot: 0,
+				mode : 'normal'
 			});
 		} 
 	} 
@@ -99,7 +141,9 @@ export default class TetrisGame extends Component {
 	// brick rotation
 	rotateBrick = () => {
 		// pass rotation to changePos
-		this.changePos(0, 1);
+		this.setState ({
+			rot: 1
+		});
 	};
 
 	// pass keyCode to move
@@ -127,9 +171,14 @@ export default class TetrisGame extends Component {
 		return (
 			<StyledTetrisWrapper onKeyDown={(e) => this.moveBrick(e)}>
 				<StyledTetrisGame >
-					<Stage  board={this.state.board} />
+					<Stage board={this.state.board} />
+					<div className='opperationSide'>
+						<button className='startButton' onClick={this.startGame}>Start Game</button>
+						<div className='score'>{`Score: ${this.state.score}`}</div>
+					</div>
+					
 				</StyledTetrisGame>
-				<button onClick={this.startGame}>Start Game</button>
+				
 			</StyledTetrisWrapper>
 		);
 	};
