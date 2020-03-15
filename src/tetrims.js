@@ -41,4 +41,5 @@ export const randomTetrims = (width) => {
 	tetrim.y = 0;
 
 	return tetrim;
+	// return Tetrims['O']
 }

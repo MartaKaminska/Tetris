@@ -13,7 +13,6 @@ export const canAddBrick = (board, brick, w, h, dir) => {
 					
 					// down collision with bottom board
 					if (brick.y+1+i == h) {
-						console.log('false', brick)
 						return ['false', 0];
 					}
 				
@@ -31,13 +30,11 @@ export const canAddBrick = (board, brick, w, h, dir) => {
 			for(let j=0; j < brickY; j++) {
 				if(brick.shape[i][j] !== 0) {
 					if(copyBoard[brick.y+1+i][brick.x+j+dir] === 'A' || (brick.x + j + dir) < 0 || (brick.x + j + dir) > w-1) {
-							console.log('falseDown')
 							return ['false', dir];
 					}
 				}
 			}
 		}
-		console.log('canAddBrick', brick);
 		return ['true', dir];
 	};
 };
@@ -55,7 +52,7 @@ export const canMoveBrick = (board, brick) => {
 			};
 		};
 	};
-	console.log('canMoveBrick', brick)
+	// console.log('canMoveBrick', brick)
 
 	// return new board with tetrim
 	return copyBoard;

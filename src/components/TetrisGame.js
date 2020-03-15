@@ -10,6 +10,7 @@ import Stage from './Stage';
 import { boardWithBrick } from '../function/boardWithBrick';
 import { canAddBrick, canMoveBrick } from '../function/moveDownBrick';
 import { rotateMatrix } from '../function/brickRotate';
+import { collapseRow } from '../function/collapsRow';
 
 import { Tetrims, randomTetrims } from '../tetrims';
 
@@ -69,6 +70,9 @@ export default class TetrisGame extends Component {
 			let brickToPaint = this.state.brick;
 			let newBoard = canMoveBrick(this.state.board, brickToPaint);
 
+			// clear line
+			newBoard = collapseRow(newBoard, this.props.w, this.props.h);
+
 			// random new brick
 			let newTetrim = randomTetrims(this.props.w);
 			// let newTetrim = this.state.brick;
@@ -100,7 +104,7 @@ export default class TetrisGame extends Component {
 
 	// pass keyCode to move
 	moveBrick = e => {
-		console.log(e.keyCode)
+		// console.log(e.keyCode)
 		if(e.keyCode === 37) {
 			this.checkMoveBrick(-1);
 		} else if(e.keyCode === 39) {
