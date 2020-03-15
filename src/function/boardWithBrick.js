@@ -1,8 +1,7 @@
-// import React from 'react';
 
 export const boardWithBrick = (board, brick, w, h) => {
 	const copy = board.map(row => [...row]);
-	const brickY = brick.shape[0].length
+	const brickY = brick.shape[0].length;
 
 	for(let l = 0; l < h; l++) {
 		for(let k = 0; k < w; k++) {

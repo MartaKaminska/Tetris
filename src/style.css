@@ -34,11 +34,8 @@ body {
 .cell {
 	height: 3vmin;
 	width: 3vmin;
-	border: 1px solid red;
-	background-color: white;
-}
-.allowed .cell {
 	border: 1px solid #777;
+	background-color: white;
 }
 
 .I {
