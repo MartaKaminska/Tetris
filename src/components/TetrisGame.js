@@ -9,20 +9,19 @@ import Stage from './Stage';
 // function
 import { boardWithBrick } from '../function/boardWithBrick';
 import { canAddBrick, canMoveBrick } from '../function/moveDownBrick';
-import { moveBrick } from '../function/updateBrickPos';
+import { rotateMatrix } from '../function/brickRotate';
 
 import { Tetrims, randomTetrims } from '../tetrims';
 
-class TetrisGame extends Component {
+export default class TetrisGame extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			board: this.startArray(),
 			brick: {
-				y: 1,
-				x: this.props.w/ 2 - 2,
-				rot: 0,
-				shape: Tetrims.Z.shape
+				x: this.props.w/2 - 2,
+				y: -1,
+				shape: randomTetrims(this.props.w).shape
 			}
 		}
 	}
@@ -37,81 +36,67 @@ class TetrisGame extends Component {
 		return stageArray;
 	}
 
-	// check if move (left-right/ interval) is possible
-	checkPos = (dir) => {
-		let canAdd = canAddBrick(this.state.board, this.state.brick, this.props.w, this.props.h, dir);
+	// move tetrim and change state board and tetrim
+	changePos = (dir, rot) => {
+		let brickClone = JSON.parse(JSON.stringify(this.state.brick));
 
-		if(canAdd === 'true'){
+		// rotate brick when requested
+		if (rot === 1) {
+			rotateMatrix(brickClone);
+		}
+
+		let [canAdd, newDir] = canAddBrick(this.state.board, brickClone, this.props.w, this.props.h, dir);
+	
+		// if rotation is not available
+		if (rot === 1 && canAdd === 'false') {
+			[canAdd, newDir]  = canAddBrick(this.state.board, this.state.brick, this.props.w, this.props.h, dir);
+			brickClone = this.state.brick;
+		}
+
+		// move brick
+		if(canAdd === 'true') {
+			brickClone.y +=1;
+			brickClone.x += newDir;
+
+			// set new state with board and brick
 			this.setState ({
-				brick: {
-					...this.state.brick,
-					y: this.state.brick.y + 1,
-					x: this.state.brick.x + dir
-				}
-			})
+				board: boardWithBrick(this.state.board, brickClone, this.props.w, this.props.h),
+				brick : brickClone,
+			});
+
+		} else {
+
+			let brickToPaint = this.state.brick;
+			let newBoard = canMoveBrick(this.state.board, brickToPaint);
+
+			// random new brick
+			let newTetrim = randomTetrims(this.props.w);
+			// let newTetrim = this.state.brick;
+
+			// nex board state with new brick
 			this.setState ({
-				board: boardWithBrick(this.state.board, this.state.brick, this.props.w, this.props.h)
+				board: boardWithBrick(newBoard, newTetrim, this.props.w, this.props.h),
+				brick : newTetrim
 			});
-		} else if (canAdd === 'falseDown' || canAdd === 'falseDownLeft' || canAdd === 'falseDownRight') {
-			this.setState ({ 
-				board: canMoveBrick(this.state.board, this.state.brick)
-			});
-			this.setState({
-				brick: {
-					y: 1,
-					x: this.props.w/ 2 - 2,
-					rot: 0,
-					shape: Tetrims.L.shape
-					// shape: randomTetrims().shape
-				}
-			});
-		} else if (canAdd === 'falseWallLeft') {
-			this.setState({
-				brick: {
-					...this.state.brick,
-					// y: this.state.brick.y + 1,
-					x: (this.state.brick.shape === Tetrims.L.shape || this.state.brick.shape === Tetrims.J.shape || this.state.brick.shape === Tetrims.I.shape) ? -1 : 0
-				}
-			})
-			// this.setState ({
-			// 	board: boardWithBrick(this.state.board, this.state.brick, this.props.w, this.props.h)
-			// });
-			console.log('canAddBrick - falseWall-left')
-		} else if (canAdd === 'falseWallRight') {
-			this.setState({
-				brick: {
-					...this.state.brick,
-					// y: this.state.brick.y + 1,
-					x: (this.state.brick.shape === Tetrims.I.shape) ? (this.props.w-4) : (this.props.w-3)
-				}
-			})
-			this.setState ({
-					board: boardWithBrick(this.state.board, this.state.brick, this.props.w, this.props.h)
-				});
-				console.log('canAddBrick - falseWall-right', this.state.brick)
-		} ;
+		} 
 	} 
 
 	// move (left-right)
 	checkMoveBrick = dir => {
-		this.checkPos(dir);
-		console.log('checkMoveBrick', this.state.brick)		
+		// pass direction to changePos
+		this.changePos(dir, 0);
 	};
 
-	// fall acceleration
+	// acceleration
 	dropBrick = () => {
-		if(canAddBrick(this.state.board, this.state.brick, this.props.w, this.props.h, 0) === 'true'){
-			this.setState ({
-				brick: {
-					...this.state.brick,
-					y: this.state.brick.y + 1
-				}
-			})
-			this.setState ({
-				board: boardWithBrick(this.state.board, this.state.brick, this.props.w, this.props.h)
-			});
-		}
-	}
+		this.changePos(0, 0);
+	};
+
+	// brick rotation
+	rotateBrick = () => {
+		// pass rotation to changePos
+		this.changePos(0, 1);
+	};
 
 	// pass keyCode to move
 	moveBrick = e => {
@@ -123,16 +108,16 @@ class TetrisGame extends Component {
 		} else if(e.keyCode === 40) {
 			this.dropBrick();
 		} else if(e.keyCode === 38) {
-			playerRotate(this.state.board, this.state.brick);
+			this.rotateBrick()		
 		}
 	};
 	
 	// starting game, set interval and checking collision
 	startGame = () => {
 		this.setIntervalId = setInterval(() => {
-			this.checkPos(0);
-		}, 500);
-	}
+			this.changePos(0, 0);
+		}, 400);
+	};
 
 	render() {
 		return (
@@ -142,15 +127,6 @@ class TetrisGame extends Component {
 				</StyledTetrisGame>
 				<button onClick={this.startGame}>Start Game</button>
 			</StyledTetrisWrapper>
-		)
-	}
+		);
+	};
 };
-
-	// rotate brick
-const playerRotate = (board, brick) => {
-		console.log(board, brick)
-}
-
-
-
-export default TetrisGame;
