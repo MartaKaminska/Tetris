@@ -1,9 +1,8 @@
-
+import React from 'react';
 
 // collision check down and side 
 export const canAddBrick = (board, brick, w, h, dir) => {
 	if(brick) {
-
 		const copyBoard = board.map(row => [...row]);
 		const brickY = brick.shape[0].length;
 
@@ -41,7 +40,6 @@ export const canAddBrick = (board, brick, w, h, dir) => {
 
 // add tetrim to board
 export const canMoveBrick = (board, brick) => {
-	
 	const copyBoard = board.map(row => [...row]);
 	const brickY = brick.shape[0].length;
 

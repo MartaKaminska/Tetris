@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-    entry: `./src/index.js`,
+    entry: "./src/index.js",
     output: {
         filename: "out.js",
         path: path.resolve(__dirname, "build")
@@ -23,6 +23,17 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.(png|jpg|svg)$/,  
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 8000
+                        }
+                    }
+                ]
             }
         ]
     }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
-// style
-import { StyledTetrisWrapper, StyledTetrisGame } from './style/StyleTetrisGame';
+import { Icon } from 'semantic-ui-react';
 
 // components
 import Stage from './Stage';
@@ -26,7 +25,8 @@ export default class TetrisGame extends Component {
 			},
 			rot: 0,
 			mode: 'normal',
-			score: 0
+			score: 0,
+			gameOver: false
 		}
 	}
 
@@ -42,89 +42,101 @@ export default class TetrisGame extends Component {
 
 	// move tetrim and change state board and tetrim
 	changePos = (dir) => {
-		if (this.state.mode === 'shouldRemove') {
-			let [newBoard, shouldRemove] = collapseRow(this.state.board, this.props.w, this.props.h);
-			if (shouldRemove) {
-				this.setState({
-					board: newBoard,
-					brick: {}, 
-					rot: 0,
-					mode: 'shouldRemove',
-					score: this.state.score+1
-				});
-			} else {
-				let newTetrim = randomTetrims(this.props.w);
-				this.setState({
-					board: newBoard,
-					brick : newTetrim,
+		if(this.state.gameOver === false) {
+			// checking if there are line to remove
+			if (this.state.mode === 'shouldRemove') {
+				let [newBoard, shouldRemove] = collapseRow(this.state.board, this.props.w, this.props.h);
+
+				//remove line
+				if (shouldRemove) {
+					this.setState({
+						board: newBoard,
+						brick: {}, 
+						rot: 0,
+						mode: 'shouldRemove',
+						score: this.state.score+1
+					});
+				} else {
+					let newTetrim = randomTetrims(this.props.w);
+					this.setState({
+						board: newBoard,
+						brick : newTetrim,
+						rot: 0,
+						mode: 'normal'
+					});
+				}
+				return;		
+			}
+
+			let brickClone = JSON.parse(JSON.stringify(this.state.brick));
+
+			// rotate brick when requested
+			if (this.state.rot === 1) {
+				rotateMatrix(brickClone);
+			}
+
+			// checking if rotation is possible
+			let [canAdd, newDir] = canAddBrick(this.state.board, brickClone, this.props.w, this.props.h, dir);
+		
+			// if rotation is not available
+			if (this.state.rot === 1 && canAdd === 'false') {
+				[canAdd, newDir]  = canAddBrick(this.state.board, this.state.brick, this.props.w, this.props.h, dir);
+				brickClone = this.state.brick;
+			}
+
+			// uppre collision with top board = game over 
+			if(canAdd === 'false' && brickClone.y < 1) {
+				this.gameOver()
+			} 
+
+			// move brick
+			if(canAdd === 'true') {
+				brickClone.y +=1;
+				brickClone.x += newDir;
+
+				// set new state with board and brick
+				this.setState ({
+					board: boardWithBrick(this.state.board, brickClone, this.props.w, this.props.h),
+					brick : brickClone,
 					rot: 0,
 					mode: 'normal'
 				});
-			}
-			return;		
-		}
-
-		let brickClone = JSON.parse(JSON.stringify(this.state.brick));
-
-		// rotate brick when requested
-		if (this.state.rot === 1) {
-			rotateMatrix(brickClone);
-		}
-
-		let [canAdd, newDir] = canAddBrick(this.state.board, brickClone, this.props.w, this.props.h, dir);
-	
-		// if rotation is not available
-		if (this.state.rot === 1 && canAdd === 'false') {
-			[canAdd, newDir]  = canAddBrick(this.state.board, this.state.brick, this.props.w, this.props.h, dir);
-			brickClone = this.state.brick;
-		}
-
-		// move brick
-		if(canAdd === 'true') {
-			brickClone.y +=1;
-			brickClone.x += newDir;
-
-			// set new state with board and brick
-			this.setState ({
-				board: boardWithBrick(this.state.board, brickClone, this.props.w, this.props.h),
-				brick : brickClone,
-				rot: 0,
-				mode: 'normal'
-			});
-
-		} else {
-
-			let brickToPaint = this.state.brick;
-			let newBoard = canMoveBrick(this.state.board, brickToPaint);
-			let shouldRemove = false;
-
-			// clear line
-			[newBoard, shouldRemove] = collapseRow(newBoard, this.props.w, this.props.h);
-
-			if (shouldRemove) {
-				this.setState({
-					board: newBoard,
-					brick: {},
-					rot: 0,
-					mode: 'shouldRemove',
-					score: this.state.score + 1
-				});
-				return;
-			}
 			
+			} else {
 
-			// random new brick
-			let newTetrim = randomTetrims(this.props.w);
-			// let newTetrim = this.state.brick;
+				let brickToPaint = this.state.brick;
+				let newBoard = canMoveBrick(this.state.board, brickToPaint);
+				let shouldRemove = false;
 
-			// nex board state with new brick
-			this.setState ({
-				board: boardWithBrick(newBoard, newTetrim, this.props.w, this.props.h),
-				brick : newTetrim,
-				rot: 0,
-				mode : 'normal'
-			});
-		} 
+				// checking if there are line to remove
+				[newBoard, shouldRemove] = collapseRow(newBoard, this.props.w, this.props.h);
+
+				// remove line
+				if (shouldRemove) {
+					this.setState({
+						board: newBoard,
+						brick: {},
+						rot: 0,
+						mode: 'shouldRemove',
+						score: this.state.score + 1
+					});
+					return;
+				}
+
+
+				// random new brick
+				let newTetrim = randomTetrims(this.props.w);
+				// let newTetrim = this.state.brick;
+
+				// next board state with new brick
+				this.setState ({
+					board: boardWithBrick(newBoard, newTetrim, this.props.w, this.props.h),
+					brick : newTetrim,
+					rot: 0,
+					mode : 'normal'
+				});
+			} 
+		}
 	} 
 
 	// move (left-right)
@@ -159,27 +171,95 @@ export default class TetrisGame extends Component {
 			this.rotateBrick()		
 		}
 	};
+
+	// right move for mobile
+	rightButton = () => {
+		this.checkMoveBrick(1)
+	}
+
+	// left move for mobile
+	leftButton = () => {
+		this.checkMoveBrick(-1)
+	}
 	
 	// starting game, set interval and checking collision
 	startGame = () => {
+		this.setState ({
+			board: this.startArray(),
+			brick: {
+				x: this.props.w/2 - 2,
+				y: -1,
+				shape: randomTetrims(this.props.w).shape
+			},
+			rot: 0,
+			mode: 'normal',
+			score: 0,
+			gameOver: false
+		});
+
 		this.setIntervalId = setInterval(() => {
 			this.changePos(0, 0);
 		}, 400);
 	};
 
+	// end game
+	gameOver = () => {
+		clearInterval(this.setIntervalId);
+		this.setState ({
+			brick: {},
+			gameOver: true
+		})
+	};
+
+	// startin game after gameOver
+	startGameAgain = () => {
+		this.setState ({
+			board: this.startArray(),
+			brick: {
+				x: this.props.w/2 - 2,
+				y: -1,
+				shape: randomTetrims(this.props.w).shape
+			},
+			rot: 0,
+			mode: 'normal',
+			score: 0,
+			gameOver: false
+		});
+
+		this.startGame()
+	}
+
 	render() {
 		return (
-			<StyledTetrisWrapper onKeyDown={(e) => this.moveBrick(e)}>
-				<StyledTetrisGame >
-					<Stage board={this.state.board} />
-					<div className='opperationSide'>
-						<button className='startButton' onClick={this.startGame}>Start Game</button>
-						<div className='score'>{`Score: ${this.state.score}`}</div>
+			<div>{!this.state.gameOver ? 
+				<div className='tetrisWrapper' style={{backgroundImage:'url("../../public/img/game.png")'}} onKeyDown={(e) => this.moveBrick(e)}>
+					<div className='header'><span>Teris</span>Game</div>
+					<div className='tetrisGame'>
+						<div className='opperationSide'>
+							<button className='startButton' onClick={this.startGame}>Start Game</button>
+							<div className='scoreDiv'>Score: {this.state.score}</div>
+						</div>
+						<Stage className='gameBoard' board={this.state.board} />
 					</div>
-					
-				</StyledTetrisGame>
-				
-			</StyledTetrisWrapper>
+					<div className='gameButtons'>
+						<div className='buttonGroup'>
+							<button onClick={this.leftButton}><Icon size='big' name='arrow left'/></button>
+							<button onClick={this.rightButton}><Icon size='big' name='arrow right'/></button>
+						</div>
+						<div className='buttonGroup'>
+							<button onClick={this.rotateBrick}><Icon size='big' name='undo'/></button>
+							<button onClick={this.dropBrick}><Icon size='big' name='arrow down'/></button>
+						</div>
+					</div>
+				</div> : 
+				<div style={{backgroundImage:'url("../../public/img/game.png")'}} className='gameOver'>
+					<h1>GAME OVER</h1>
+					<p>Play again ...</p>
+					<div className='endButton'>
+						<button onClick={this.startGameAgain} >YES</button>
+					</div>
+				</div>}
+			</div>
 		);
 	};
 };

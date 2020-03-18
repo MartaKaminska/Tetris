@@ -1,0 +1,19 @@
+.row {
+	display: flex;
+	width: auto;
+}
+.cell {
+	height: 4vmin;
+	width: 4vmin;
+	border: 1px solid var(--color-gold);
+	background-color: black;
+}
+
+.I {background-color: yellow;}
+.S {background-color: orange;}
+.O {background-color: rgb(136, 9, 136);}
+.Z {background-color: violet;}
+.T {background-color: red;}
+.L {background-color: darkred;}
+.J {background-color: brown;}
+.A {background-color: var(--color-gold);}

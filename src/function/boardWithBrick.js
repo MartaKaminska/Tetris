@@ -1,3 +1,4 @@
+import React from 'react';
 
 export const boardWithBrick = (board, brick, w, h) => {
 	const copyBoard = board.map(row => [...row]);

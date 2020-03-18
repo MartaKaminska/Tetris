@@ -1,3 +1,4 @@
+import React from 'react';
 
 // array of all tetrims
 export const Tetrims = {

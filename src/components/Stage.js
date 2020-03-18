@@ -1,7 +1,6 @@
 import React from "react";
 
 function Stage(props) {
-	// console.log('Stage', props.board)
 	return (
 		<div className='stage'>
 			{props.board.map((row, y) => 
