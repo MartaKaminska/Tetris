@@ -4,12 +4,14 @@ import { Icon } from 'semantic-ui-react';
 
 // components
 import Stage from './Stage';
+import Scorelist from './Scorelist';
 
 // function
 import { boardWithBrick } from '../function/boardWithBrick';
 import { canAddBrick, canMoveBrick } from '../function/moveDownBrick';
 import { rotateMatrix } from '../function/brickRotate';
 import { collapseRow } from '../function/collapsRow';
+import { setLocalStorage } from '../function/localStorage';
 
 import { Tetrims, randomTetrims } from '../tetrims';
 
@@ -41,7 +43,7 @@ export default class TetrisGame extends Component {
 	}
 
 	// move tetrim and change state board and tetrim
-	changePos = (dir) => {
+	changePos = dir => {
 		if(this.state.gameOver === false) {
 			// checking if there are line to remove
 			if (this.state.mode === 'shouldRemove') {
@@ -205,6 +207,10 @@ export default class TetrisGame extends Component {
 	// end game
 	gameOver = () => {
 		clearInterval(this.setIntervalId);
+
+		// saving new result list to localStorage
+		localStorage.setItem('score', setLocalStorage(localStorage.getItem('score'), this.state.score));
+		
 		this.setState ({
 			brick: {},
 			gameOver: true
@@ -258,6 +264,7 @@ export default class TetrisGame extends Component {
 					<div className='endButton'>
 						<button onClick={this.startGameAgain} >YES</button>
 					</div>
+					<Scorelist score={localStorage.getItem('score')}/>
 				</div>}
 			</div>
 		);

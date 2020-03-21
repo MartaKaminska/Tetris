@@ -5,7 +5,7 @@
 .cell {
 	height: 4vmin;
 	width: 4vmin;
-	border: 1px solid var(--color-gold);
+	border: 1px solid rgb(26, 19, 3);
 	background-color: black;
 }
 

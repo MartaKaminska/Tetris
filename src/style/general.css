@@ -2,7 +2,7 @@
 @import './header.css';
 @import './tetrimGame.css';
 @import './gameOver.css';
-
+@import './scrollBar.css';
 * {
 	box-sizing: border-box;
 }

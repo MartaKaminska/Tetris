@@ -6,6 +6,7 @@
 	font-size: 24px;
 	background-color: red;
 	color: black;
+	border-bottom: 2px solid var(--color-gold);
 }
 
 .header>span{
