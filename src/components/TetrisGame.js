@@ -5,6 +5,7 @@ import { Icon } from 'semantic-ui-react';
 // components
 import Stage from './Stage';
 import Scorelist from './Scorelist';
+import Manual from './Manual';
 
 // function
 import { boardWithBrick } from '../function/boardWithBrick';
@@ -12,6 +13,7 @@ import { canAddBrick, canMoveBrick } from '../function/moveDownBrick';
 import { rotateMatrix } from '../function/brickRotate';
 import { collapseRow } from '../function/collapsRow';
 import { setLocalStorage } from '../function/localStorage';
+import { speedUp } from '../function/speedUp';
 
 import { Tetrims, randomTetrims } from '../tetrims';
 
@@ -30,6 +32,11 @@ export default class TetrisGame extends Component {
 			score: 0,
 			gameOver: false
 		}
+	}
+
+	//focus on key action
+	componentDidMount = () => {
+		document.body.addEventListener('keydown', e => this.moveBrick(e));
 	}
 
 	// drawing an empty board
@@ -56,8 +63,15 @@ export default class TetrisGame extends Component {
 						brick: {}, 
 						rot: 0,
 						mode: 'shouldRemove',
-						score: this.state.score+1
+						score: this.state.score + 1
 					});
+					//check if set new interval and set new interval
+					if(this.state.score % 10 === 0) { 
+						clearInterval(this.setIntervalId);
+						this.setIntervalId = setInterval(() => {
+							this.changePos(0, 0);
+						}, speedUp(this.state.score)) 
+					};
 				} else {
 					let newTetrim = randomTetrims(this.props.w);
 					this.setState({
@@ -122,9 +136,15 @@ export default class TetrisGame extends Component {
 						mode: 'shouldRemove',
 						score: this.state.score + 1
 					});
+					//check if set new interval and set new interval
+					if(this.state.score % 10 === 0) { 
+						clearInterval(this.setIntervalId);
+						this.setIntervalId = setInterval(() => {
+							this.changePos(0, 0);
+						}, speedUp(this.state.score)) 
+					};
 					return;
 				}
-
 
 				// random new brick
 				let newTetrim = randomTetrims(this.props.w);
@@ -201,7 +221,7 @@ export default class TetrisGame extends Component {
 
 		this.setIntervalId = setInterval(() => {
 			this.changePos(0, 0);
-		}, 400);
+		}, 800)
 	};
 
 	// end game
@@ -241,7 +261,8 @@ export default class TetrisGame extends Component {
 				<div className='tetrisWrapper' style={{backgroundImage:'url("../../public/img/game.png")'}} onKeyDown={(e) => this.moveBrick(e)}>
 					<div className='header'><span>Teris</span>Game</div>
 					<div className='tetrisGame'>
-						<div className='opperationSide'>
+						<div className='operationSide'>
+							<Manual />
 							<button className='startButton' onClick={this.startGame}>Start Game</button>
 							<div className='scoreDiv'>Score: {this.state.score}</div>
 						</div>

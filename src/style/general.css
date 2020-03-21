@@ -3,6 +3,9 @@
 @import './tetrimGame.css';
 @import './gameOver.css';
 @import './scrollBar.css';
+@import './operationSide.css';
+@import './mediaStyle.css';
+
 * {
 	box-sizing: border-box;
 }
@@ -13,38 +16,6 @@ body {
 	font-family: 'Permanent Marker', cursive;
 	
 	--color-gold: rgb(143, 110, 28);
-}
-
-
-@media (min-width: 650px) {
-	.tetrisGame {
-		display: flex;
-		flex-direction: row;
-		flex-flow: row-reverse;
-		justify-content: center;
-		margin-top: 30px;
-	}
-	.header {
-		padding-top: 10px;
-		padding-bottom: 10px;
-	}
-	.gameButtons {
-		display: none;
-	}
-	.stage {
-		margin: 0;
-	}
-	.opperationSide {
-		flex-direction: column;
-		padding: 50px 10px 50px 10px;
-		width: auto;
-		justify-content: space-around;
-		margin-left: 10px;
-	}
-
-	.opperationSide > button {
-		margin-bottom: 50px;
-	}
 }
 
 

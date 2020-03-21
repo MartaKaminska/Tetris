@@ -8,7 +8,7 @@ function Stage(props) {
 				{row.map((cell, x) => 
 					<div key={x} className={'cell ' + cell}></div>
 					)}
-				</div>)}
+			</div>)}
 		</div>
 	)
 };
