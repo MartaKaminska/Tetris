@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+// style framework
 import { Icon } from 'semantic-ui-react';
 
 // components
@@ -15,6 +16,7 @@ import { collapseRow } from '../function/collapsRow';
 import { setLocalStorage } from '../function/localStorage';
 import { speedUp } from '../function/speedUp';
 
+// elements (bricks/ tetrims)
 import { Tetrims, randomTetrims } from '../tetrims';
 
 export default class TetrisGame extends Component {
@@ -63,13 +65,13 @@ export default class TetrisGame extends Component {
 						brick: {}, 
 						rot: 0,
 						mode: 'shouldRemove',
-						score: this.state.score + 5 
+						score: this.state.score + 1 
 					});
 					//check if set new interval and set new interval
 					if(this.state.score % 10 === 0) { 
 						clearInterval(this.setIntervalId);
 						this.setIntervalId = setInterval(() => {
-							this.changePos(0, 0);
+							this.changePos(0);
 						}, speedUp(this.state.score)) 
 					};
 				} else {
@@ -83,7 +85,8 @@ export default class TetrisGame extends Component {
 				}
 				return;		
 			}
-
+			
+			// deep copy of brick 
 			let brickClone = JSON.parse(JSON.stringify(this.state.brick));
 
 			// rotate brick when requested
@@ -96,7 +99,7 @@ export default class TetrisGame extends Component {
 		
 			// if rotation is not available
 			if (this.state.rot === 1 && canAdd === 'false') {
-				[canAdd, newDir]  = canAddBrick(this.state.board, this.state.brick, this.props.w, this.props.h, dir);
+				[canAdd, newDir] = canAddBrick(this.state.board, this.state.brick, this.props.w, this.props.h, dir);
 				brickClone = this.state.brick;
 			}
 
@@ -135,13 +138,13 @@ export default class TetrisGame extends Component {
 						brick: {},
 						rot: 0,
 						mode: 'shouldRemove',
-						score: this.state.score + 5
+						score: this.state.score + 1
 					});
 					//check if set new interval and set new interval
 					if(this.state.score % 10 === 0) { 
 						clearInterval(this.setIntervalId);
 						this.setIntervalId = setInterval(() => {
-							this.changePos(0, 0);
+							this.changePos(0);
 						}, speedUp(this.state.score)) 
 					};
 					return;
@@ -149,7 +152,6 @@ export default class TetrisGame extends Component {
 
 				// random new brick
 				let newTetrim = randomTetrims(this.props.w);
-				// let newTetrim = this.state.brick;
 
 				// next board state with new brick
 				this.setState ({
@@ -165,12 +167,12 @@ export default class TetrisGame extends Component {
 	// move (left-right)
 	checkMoveBrick = dir => {
 		// pass direction to changePos
-		this.changePos(dir, 0);
+		this.changePos(dir);
 	};
 
 	// acceleration
 	dropBrick = () => {
-		this.changePos(0, 0);
+		this.changePos(0);
 	};
 
 	// brick rotation
@@ -221,7 +223,7 @@ export default class TetrisGame extends Component {
 		});
 
 		this.setIntervalId = setInterval(() => {
-			this.changePos(0, 0);
+			this.changePos(0);
 		}, 800)
 	};
 

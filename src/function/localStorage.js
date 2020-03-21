@@ -1,4 +1,3 @@
-
 export const setLocalStorage = (storage, newScore) => {
 	let scorelist = [];
 	let date = new Date;

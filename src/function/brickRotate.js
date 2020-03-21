@@ -1,7 +1,4 @@
-import React from 'react';
-
 // math rotation function from stackoverflow
-
 export const rotateMatrix = (brick) =>
 { 
 	const N = brick.shape[0].length;
