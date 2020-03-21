@@ -63,7 +63,7 @@ export default class TetrisGame extends Component {
 						brick: {}, 
 						rot: 0,
 						mode: 'shouldRemove',
-						score: this.state.score + 1
+						score: this.state.score + 5 
 					});
 					//check if set new interval and set new interval
 					if(this.state.score % 10 === 0) { 
@@ -102,7 +102,8 @@ export default class TetrisGame extends Component {
 
 			// uppre collision with top board = game over 
 			if(canAdd === 'false' && brickClone.y < 1) {
-				this.gameOver()
+				this.gameOver();
+				return;
 			} 
 
 			// move brick
@@ -134,7 +135,7 @@ export default class TetrisGame extends Component {
 						brick: {},
 						rot: 0,
 						mode: 'shouldRemove',
-						score: this.state.score + 1
+						score: this.state.score + 5
 					});
 					//check if set new interval and set new interval
 					if(this.state.score % 10 === 0) { 
@@ -258,7 +259,7 @@ export default class TetrisGame extends Component {
 	render() {
 		return (
 			<div>{!this.state.gameOver ? 
-				<div className='tetrisWrapper' style={{backgroundImage:'url("../../public/img/game.png")'}} onKeyDown={(e) => this.moveBrick(e)}>
+				<div className='tetrisWrapper' style={{backgroundImage:'url("../../public/img/game.png")'}}>
 					<div className='header'><span>Teris</span>Game</div>
 					<div className='tetrisGame'>
 						<div className='operationSide'>

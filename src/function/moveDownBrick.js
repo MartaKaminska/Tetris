@@ -50,7 +50,6 @@ export const canMoveBrick = (board, brick) => {
 			};
 		};
 	};
-	// console.log('canMoveBrick', brick)
 
 	// return new board with tetrim
 	return copyBoard;
