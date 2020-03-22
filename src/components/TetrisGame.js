@@ -74,10 +74,11 @@ export default class TetrisGame extends Component {
 							this.changePos(0);
 						}, speedUp(this.state.score)) 
 					};
+					
 				} else {
 					let newTetrim = randomTetrims(this.props.w);
 					this.setState({
-						board: newBoard,
+						board: boardWithBrick(newBoard, newTetrim, this.props.w, this.props.h),
 						brick : newTetrim,
 						rot: 0,
 						mode: 'normal'
