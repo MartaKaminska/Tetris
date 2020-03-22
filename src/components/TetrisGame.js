@@ -261,7 +261,7 @@ export default class TetrisGame extends Component {
 	render() {
 		return (
 			<div>{!this.state.gameOver ? 
-				<div className='tetrisWrapper' style={{backgroundImage:'url("../../public/img/game.png")'}}>
+				<div className='tetrisWrapper' style={{backgroundImage:'url("../public/img/game.png")'}}>
 					<div className='header'><span>Teris</span>Game</div>
 					<div className='tetrisGame'>
 						<div className='operationSide'>
@@ -282,7 +282,7 @@ export default class TetrisGame extends Component {
 						</div>
 					</div>
 				</div> : 
-				<div style={{backgroundImage:'url("../../public/img/game.png")'}} className='gameOver'>
+				<div style={{backgroundImage:'url("../public/img/game.png")'}} className='gameOver'>
 					<h1>GAME OVER</h1>
 					<p>Play again ...</p>
 					<div className='endButton'>

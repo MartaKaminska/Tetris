@@ -1,6 +1,5 @@
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
-// const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     entry: ["whatwg-fetch", "./src/index.js"],
@@ -27,6 +26,10 @@ module.exports = {
                 use: ["style-loader", "css-loader"]
             },
             {
+                test: /\.scss$/,
+                use: ['style-loader', 'css-loader', 'sass-loader']
+            },
+            {
                 test: /\.(html)$/,
                 use: ["html-loader"]
             },
@@ -36,9 +39,6 @@ module.exports = {
             },
         ]},
             plugins: [
-            // new HtmlWebpackPlugin({
-            //     template: path.resolve(__dirname, "./index.html"),
-            // }),
             new CopyPlugin([
                 {
                 from: "./index.html",
