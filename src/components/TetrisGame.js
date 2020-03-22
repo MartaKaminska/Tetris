@@ -263,7 +263,7 @@ export default class TetrisGame extends Component {
 		return (
 			<div>{!this.state.gameOver ? 
 				<div className='tetrisWrapper' style={{backgroundImage:'url("../public/img/game.png")'}}>
-					<div className='header'><span>Teris</span>Game</div>
+					<div className='header'><span>Tetris</span>Game</div>
 					<div className='tetrisGame'>
 						<div className='operationSide'>
 							<Manual />
