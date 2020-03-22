@@ -1,7 +1,9 @@
 const path = require("path");
+const CopyPlugin = require("copy-webpack-plugin");
+// const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-    entry: "./src/index.js",
+    entry: ["whatwg-fetch", "./src/index.js"],
     output: {
         filename: "out.js",
         path: path.resolve(__dirname, "build")
@@ -22,19 +24,27 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                use: ["style-loader", "css-loader"]
             },
             {
-                test: /\.(png|jpg|svg)$/,  
-                use: [
-                    {
-                        loader: 'url-loader',
-                        options: {
-                            limit: 8000
-                        }
-                    }
-                ]
-            }
-        ]
-    }
+                test: /\.(html)$/,
+                use: ["html-loader"]
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                use: ["file-loader"],
+            },
+        ]},
+            plugins: [
+            // new HtmlWebpackPlugin({
+            //     template: path.resolve(__dirname, "./index.html"),
+            // }),
+            new CopyPlugin([
+                {
+                from: "./index.html",
+                to: "index.html",
+                }
+            ])
+            ],
+        devtool: "cheap-module-eval-source-map"
 };
